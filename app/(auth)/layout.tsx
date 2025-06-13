@@ -1,32 +1,33 @@
 import React from 'react'
 import Image from 'next/image'
-import icon from '../../public/favicon.ico'
+import icon from '../../public/logobg.png'
 import cloudFile from '../../public/cloudfile.png'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className='flex flex-col lg:flex-row min-h-screen'>
-			<section className='bg-blue-100 w-full lg:w-1/3 xl:w-1/4 center flex-col px-6 py-12 gap-10'>
-				<div className='flex flex-col items-center mb-10'>
-					<Image src={icon} alt='Cluud logo' width={60} height={60} />
-					<h2 className='text-lg sm:text-xl font-semibold mt-2'>
-						Cluud Storage
-					</h2>
+			<section className='bg-blue-100 w-full lg:w-1/3 xl:w-1/4 flex flex-row sm:flex-col justify-center items-center px-6 py-12 gap-8'>
+				<div className='flex flex-col items-center gap-2'>
+					<Image
+						src={icon}
+						alt='Cluud logo'
+						width={120}
+						height={60}
+					/>
+					<h2 className='text-lg sm:text-xl font-semibold'>Cluud</h2>
 				</div>
 
-				<div className='flex items-center flex-col'>
-					<h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
+				<div className='flex sm:flex-col flex-row items-center gap-4 text-center'>
+					<h1 className='sm:font-bold font-semibold sm:text-3xl text-[20px]'>
 						Manage your files the best way
 					</h1>
-					<p className='text-sm sm:text-base text-gray-700'>
+					<p className='text-sm sm:text-base text-gray-700 max-w-xs hidden sm:block'>
 						This is a place where you can store all your files
 					</p>
 					<Image
 						src={cloudFile}
-						alt='cluud files'
-						width={220}
-						height={220}
-						className='transition-all hover:rotate-3 hover:scale-105 cursor-pointer'
+						alt='Cluud files'
+						className='transition-all hover:rotate-3 hover:scale-105 cursor-pointer w-32 sm:w-40 md:w-52 lg:w-64 sm:block hidden'
 					/>
 				</div>
 			</section>
