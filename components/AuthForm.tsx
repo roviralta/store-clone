@@ -64,10 +64,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className='space-y-6
-			'
+				className='space-y-8 w-1/2'
 			>
-				<h1 className='font-bold m-5 text-2xl mb-10'>
+				<h1 className='font-bold m-5 text-2xl mb-8'>
 					{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
 				</h1>
 
@@ -82,6 +81,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 									<Input
 										placeholder='Enter your username'
 										{...field}
+										className='shadow h-10 sm:text-[15px] text-[10px]'
 									/>
 								</FormControl>
 								<FormMessage />
@@ -100,6 +100,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 								<Input
 									placeholder='Enter your email'
 									{...field}
+									className='shadow h-10 sm:text-[15px] text-[10px]'
 								/>
 							</FormControl>
 							<FormMessage />
@@ -109,7 +110,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
 				<Button
 					type='submit'
-					className='bg-blue-100 text-black hover:bg-blue-500 hover:cursor-pointer'
+					className='bg-blue-100 text-black hover:bg-blue-300 hover:cursor-pointer'
 					disabled={isLoading}
 				>
 					{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
@@ -126,7 +127,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
 				{errorMessage && <p className='text-red-500'>{errorMessage}</p>}
 
-				<div className='flex justify-center'>
+				<div className='flex justify-center sm:text-[15px] text-[10px]'>
 					<p>
 						{type === 'sign-in'
 							? "Don't have an account?"
