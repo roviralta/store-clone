@@ -18,6 +18,7 @@ import Image from 'next/image'
 import loader from '../public/loader.svg'
 import Link from 'next/link'
 import { createAccount } from '@/lib/actions/user.actions'
+import OtpModal from './OtpModal'
 
 // Define FormType
 export type FormType = 'sign-in' | 'sign-up'
@@ -67,25 +68,45 @@ const AuthForm = ({ type }: { type: FormType }) => {
 	}
 
 	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className='space-y-8 w-1/2'
-			>
-				<h1 className='font-bold m-5 text-2xl mb-8'>
-					{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
-				</h1>
+		<>
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className='space-y-8 w-1/2'
+				>
+					<h1 className='font-bold m-5 text-2xl mb-8'>
+						{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
+					</h1>
 
-				{type === 'sign-up' && (
+					{type === 'sign-up' && (
+						<FormField
+							control={form.control}
+							name='username'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Username</FormLabel>
+									<FormControl>
+										<Input
+											placeholder='Enter your username'
+											{...field}
+											className='shadow h-10 sm:text-[15px] text-[10px]'
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					)}
+
 					<FormField
 						control={form.control}
-						name='username'
+						name='email'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Username</FormLabel>
+								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
-										placeholder='Enter your username'
+										placeholder='Enter your email'
 										{...field}
 										className='shadow h-10 sm:text-[15px] text-[10px]'
 									/>
@@ -94,60 +115,50 @@ const AuthForm = ({ type }: { type: FormType }) => {
 							</FormItem>
 						)}
 					/>
-				)}
 
-				<FormField
-					control={form.control}
-					name='email'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Email</FormLabel>
-							<FormControl>
-								<Input
-									placeholder='Enter your email'
-									{...field}
-									className='shadow h-10 sm:text-[15px] text-[10px]'
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<Button
-					type='submit'
-					className='bg-blue-100 text-black hover:bg-blue-300 hover:cursor-pointer'
-					disabled={isLoading}
-				>
-					{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
-					{isLoading && (
-						<Image
-							src={loader}
-							alt='loader'
-							className='animate-spin ml-2'
-							width={20}
-							height={20}
-						/>
-					)}
-				</Button>
-
-				{errorMessage && <p className='text-red-500'>{errorMessage}</p>}
-
-				<div className='flex justify-center sm:text-[15px] text-[10px]'>
-					<p>
-						{type === 'sign-in'
-							? "Don't have an account?"
-							: 'Already have an account?'}
-					</p>
-					<Link
-						href={type === 'sign-in' ? '/sign-up' : '/sign-in'}
-						className='ml-2 text-blue-500 font-semibold hover:underline'
+					<Button
+						type='submit'
+						className='bg-blue-100 text-black hover:bg-blue-300 hover:cursor-pointer'
+						disabled={isLoading}
 					>
-						{type === 'sign-in' ? 'Sign Up' : 'Sign In'}
-					</Link>
-				</div>
-			</form>
-		</Form>
+						{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
+						{isLoading && (
+							<Image
+								src={loader}
+								alt='loader'
+								className='animate-spin ml-2'
+								width={20}
+								height={20}
+							/>
+						)}
+					</Button>
+
+					{errorMessage && (
+						<p className='text-red-500'>{errorMessage}</p>
+					)}
+
+					<div className='flex justify-center sm:text-[15px] text-[10px]'>
+						<p>
+							{type === 'sign-in'
+								? "Don't have an account?"
+								: 'Already have an account?'}
+						</p>
+						<Link
+							href={type === 'sign-in' ? '/sign-up' : '/sign-in'}
+							className='ml-2 text-blue-500 font-semibold hover:underline'
+						>
+							{type === 'sign-in' ? 'Sign Up' : 'Sign In'}
+						</Link>
+					</div>
+				</form>
+			</Form>
+			{true && (
+				<OtpModal
+					email={form.getValues('email')}
+					accountId={accountId}
+				/>
+			)}
+		</>
 	)
 }
 
