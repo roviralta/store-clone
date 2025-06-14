@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import loader from '../public/loader.svg'
 import Link from 'next/link'
+import { createAccount } from '@/lib/actions/user.actions'
 
 // Define FormType
 export type FormType = 'sign-in' | 'sign-up'
@@ -37,6 +38,7 @@ const authFormSchema = (formtype: FormType) =>
 const AuthForm = ({ type }: { type: FormType }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
+	const [accountId, setAccountId] = useState(null)
 
 	const formSchema = authFormSchema(type)
 
@@ -50,11 +52,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		setIsLoading(true)
+		setErrorMessage('')
 		try {
-			console.log(values)
-			// API logic here
+			const user = await createAccount({
+				username: values.username || '',
+				email: values.email,
+			})
+			setAccountId(user.accountId)
 		} catch (err) {
-			setErrorMessage('Something went wrong')
+			setErrorMessage('Failed to create an account. Please try again')
 		} finally {
 			setIsLoading(false)
 		}
