@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
 	title: 'Cluud',
-	description: 'Cluud -  The only storage solution you need.',
+	description: 'Cluud - The only storage solution you need.',
 }
 
 export default function RootLayout({
@@ -19,8 +19,10 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang='en'>
-			<body className={`${poppins.variable} font-poppins antialiased`}>
+		<html lang='en' className='h-full'>
+			<body
+				className={`${poppins.variable} font-poppins antialiased h-full`}
+			>
 				{children}
 			</body>
 		</html>
