@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const Sidebar = () => {
 	return (
-		<aside className='hidden sm:flex flex-col gap-20 p-4 w-48 bg-gray-100 border-r h-full'>
+		<aside className='hidden sm:flex flex-col gap-20 p-4 w-48 border-r h-full'>
 			<div className='center gap-2 text-3xl font-bold text-gray-600'>
 				<h1>Cluud</h1>
 				<Image src={logobg} alt='logo' width={50} height={50} />
