@@ -9,15 +9,13 @@ import {
 import { IoMenu } from 'react-icons/io5'
 import logobg from '../public/logobg.png'
 import Image from 'next/image'
-import { MdDashboard } from 'react-icons/md'
-import { BsImages } from 'react-icons/bs'
-import { FaVideo } from 'react-icons/fa'
-import { IoDocumentSharp } from 'react-icons/io5'
-import { FaPaperclip } from 'react-icons/fa6'
 import Link from 'next/link'
 import { navItems } from '@/app/constants'
+import Profile from './Profile'
 
-const HamburguerMenu = () => {
+const HamburguerMenu = ({ user }: any) => {
+	console.log('🍔 HamburguerMenu user:', user)
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -36,14 +34,27 @@ const HamburguerMenu = () => {
 				<DropdownMenuSeparator />
 				{navItems.map((item) => {
 					return (
-						<Link href={item.url}>
-							<DropdownMenuItem className='hover:bg-gray-100 h-12 px-3 py-2 rounded-md cursor-pointer transition text-gray-700'>
+						<Link href={item.url} key={item.url}>
+							<DropdownMenuItem className='hover:bg-gray-100 h-12 px-3 py-2 rounded-md cursor-pointer transition'>
 								<item.icon className='size-4' />
-								{item.name}
+								<span className='text-gray-700'>
+									{item.name}
+								</span>
 							</DropdownMenuItem>
 						</Link>
 					)
 				})}
+				<DropdownMenuSeparator />
+
+				{user?.username && user?.email && user?.avatar ? (
+					<DropdownMenuItem className='hover:bg-gray-100 h-12 px-3 py-2 rounded-md cursor-pointer transition'>
+						<Profile {...user} />
+					</DropdownMenuItem>
+				) : (
+					<DropdownMenuItem className='hover:bg-gray-100 h-12 px-3 py-2 rounded-md cursor-pointer transition'>
+						<span className='text-gray-500'>Login</span>
+					</DropdownMenuItem>
+				)}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)

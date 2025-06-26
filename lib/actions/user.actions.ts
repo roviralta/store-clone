@@ -1,11 +1,9 @@
 'use server'
 
 import { ID, Query } from 'node-appwrite'
-import { createAdminClient } from '../appwrite'
+import { createAdminClient, createClient } from '../appwrite'
 import { appwriteConfig } from '../appwrite/config'
-import { parse } from 'path'
 import { parseStringify } from '../utils'
-import { SERVER_PROPS_EXPORT_ERROR } from 'next/dist/lib/constants'
 import { cookies } from 'next/headers'
 
 const getUserByEmail = async (email: string) => {
@@ -79,7 +77,7 @@ export const verifySecret = async ({
 
 		const session = await account.createSession(accountId, password)
 
-		;(await cookies()).set('aapwrite-session', session.secret, {
+		;(await cookies()).set('appwrite-session', session.secret, {
 			path: '/',
 			httpOnly: true,
 			sameSite: 'strict',
@@ -89,4 +87,19 @@ export const verifySecret = async ({
 	} catch (error) {
 		handleError(error, 'OTP code not correct')
 	}
+}
+
+export const getCurrentUser = async () => {
+	const { databases, account } = await createClient()
+
+	const result = await account.get()
+	const user = await databases.listDocuments(
+		appwriteConfig.databaseId,
+		appwriteConfig.usersCollection,
+		[Query.equal('accountId', [result.$id])]
+	)
+
+	if (user.total <= 0) return null
+
+	return parseStringify(user.documents[0])
 }

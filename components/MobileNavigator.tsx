@@ -4,11 +4,13 @@ import FileUploader from './FileUploader'
 import { CiLogout } from 'react-icons/ci'
 import HamburguerMenu from './HamburguerMenu'
 
-const MobileNavigator = () => {
+const MobileNavigator = ({ user }: any) => {
+	console.log('🍔 mobile user:', user)
+
 	return (
 		<div className='sm:hidden w-full flex items-center justify-between py-4'>
-			<div className='center gap-4 ml-4 text-lg font-semibold ml-2'>
-				<HamburguerMenu />
+			<div className='center gap-4 ml-4 text-lg font-semibold'>
+				<HamburguerMenu user={user} />
 				<Search />
 			</div>
 

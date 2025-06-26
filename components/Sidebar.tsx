@@ -5,11 +5,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { navItems } from '@/app/constants'
 import { usePathname } from 'next/navigation'
+import Profile from './Profile'
 
-const Sidebar = () => {
+const Sidebar = ({ user }: any) => {
 	const pathname = usePathname()
 	return (
-		<aside className='hidden sm:flex flex-col gap-20 p-4 w-48 lg:w-80 border-r h-full pl-10'>
+		<aside className='hidden sm:flex flex-col gap-20 p-4 w-48 lg:w-80 lg:text-[18px] border-r h-full justify-between'>
 			<Link
 				href='/'
 				className='center gap-2 text-3xl font-bold text-gray-600'
@@ -23,7 +24,7 @@ const Sidebar = () => {
 					return (
 						<Link key={item.url} href={item.url}>
 							<li
-								className={`hover:rounded-2xl px-2 h-10 hover:border hover:bg-blue-100 cursor-pointer flex justify-left items-center gap-4 ${
+								className={`hover:rounded-2xl h-10 hover:border hover:bg-blue-100 cursor-pointer flex justify-center items-center gap-4 ${
 									active
 										? 'bg-blue-100 border rounded-2xl'
 										: ''
@@ -36,6 +37,7 @@ const Sidebar = () => {
 					)
 				})}
 			</ul>
+			{user?.username ? <Profile {...user} /> : <p>Login</p>}
 		</aside>
 	)
 }
