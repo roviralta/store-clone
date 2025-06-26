@@ -5,6 +5,7 @@ import { createAdminClient, createClient } from '../appwrite'
 import { appwriteConfig } from '../appwrite/config'
 import { parseStringify } from '../utils'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 const getUserByEmail = async (email: string) => {
 	const { databases } = await createAdminClient()
@@ -99,7 +100,23 @@ export const getCurrentUser = async () => {
 		[Query.equal('accountId', [result.$id])]
 	)
 
+
+	console.log('hola que ase user: ',user)
+
 	if (user.total <= 0) return null
 
 	return parseStringify(user.documents[0])
+}
+
+export const signOutUser = async () => {
+	const { account } = await createClient()
+
+	try {
+		await account.deleteSession('current')
+		;(await cookies()).delete('appwrite-session')
+	} catch (error) {
+		handleError(error, 'Error logging out')
+	} finally {
+		redirect('/sign-in')
+	}
 }

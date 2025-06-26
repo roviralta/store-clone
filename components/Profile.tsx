@@ -12,9 +12,7 @@ const Profile = ({ username, avatar, email }: Props) => {
 	return (
 		<div className='center gap-2'>
 			<Image src={profileAvatar} alt='avatar' width={44} height={44} />
-			<div>
-				<p>{username}</p>
-			</div>
+			<span className='text-gray-700'>{username}</span>
 		</div>
 	)
 }

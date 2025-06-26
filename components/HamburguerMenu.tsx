@@ -14,8 +14,6 @@ import { navItems } from '@/app/constants'
 import Profile from './Profile'
 
 const HamburguerMenu = ({ user }: any) => {
-	console.log('🍔 HamburguerMenu user:', user)
-
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -46,13 +44,18 @@ const HamburguerMenu = ({ user }: any) => {
 				})}
 				<DropdownMenuSeparator />
 
-				{user?.username && user?.email && user?.avatar ? (
+				{user?.username ? (
 					<DropdownMenuItem className='hover:bg-gray-100 h-12 px-3 py-2 rounded-md cursor-pointer transition'>
 						<Profile {...user} />
 					</DropdownMenuItem>
 				) : (
 					<DropdownMenuItem className='hover:bg-gray-100 h-12 px-3 py-2 rounded-md cursor-pointer transition'>
-						<span className='text-gray-500'>Login</span>
+						<Link
+							href='sign-in'
+							className='hover:font-semibold text-gray-800 hover:underline underline-offset-4 decoration-2 decoration-blue-500'
+						>
+							<span>Login</span>
+						</Link>{' '}
 					</DropdownMenuItem>
 				)}
 			</DropdownMenuContent>
