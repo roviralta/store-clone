@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-import profileAvatar from '../public/profileAvatar.webp'
 
 interface Props {
 	username: string
@@ -10,10 +9,13 @@ interface Props {
 
 const Profile = ({ username, avatar, email }: Props) => {
 	return (
-		<div className='center gap-2'>
-			<Image src={profileAvatar} alt='avatar' width={44} height={44} />
+		<button
+			className='center gap-2 cursor-pointer hover:underline underline-offset-4 decoration-2 decoration-blue-500 hover:font-semibold text-gray-800'
+			onClick={() => console.log('got to the profile')}
+		>
+			<Image src={avatar} alt='avatar' width={44} height={44} />
 			<span className='text-gray-700'>{username}</span>
-		</div>
+		</button>
 	)
 }
 

@@ -100,9 +100,6 @@ export const getCurrentUser = async () => {
 		[Query.equal('accountId', [result.$id])]
 	)
 
-
-	console.log('hola que ase user: ',user)
-
 	if (user.total <= 0) return null
 
 	return parseStringify(user.documents[0])
@@ -118,5 +115,19 @@ export const signOutUser = async () => {
 		handleError(error, 'Error logging out')
 	} finally {
 		redirect('/sign-in')
+	}
+}
+
+export const signInUser = async ({ email }: { email: string }) => {
+	try {
+		const user = await getUserByEmail(email)
+		if (!user) {
+			return parseStringify({ accountId: null, error: 'User not found' })
+		}
+		await sendEmailOTP({ email })
+		return parseStringify({ accountId: user.accountId })
+	} catch (error) {
+		handleError(error, 'Failed to sign in user')
+		return parseStringify({ accountId: null, error: 'Sign in failed' })
 	}
 }

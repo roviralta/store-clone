@@ -4,8 +4,9 @@ import logobg from '../public/logobg.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { navItems } from '@/app/constants'
-import { redirect, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Profile from './Profile'
+import { CgProfile } from 'react-icons/cg'
 
 const Sidebar = ({ user }: any) => {
 	const pathname = usePathname()
@@ -43,8 +44,9 @@ const Sidebar = ({ user }: any) => {
 				) : (
 					<Link
 						href='sign-in'
-						className='hover:font-semibold text-gray-800 hover:underline underline-offset-4 decoration-2 decoration-blue-500'
+						className='hover:font-semibold text-gray-800 hover:underline underline-offset-4 decoration-2 decoration-blue-500 center gap-2'
 					>
+						<CgProfile size={25} />
 						<span>Login</span>
 					</Link>
 				)}

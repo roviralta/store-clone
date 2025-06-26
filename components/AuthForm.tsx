@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import loader from '../public/loader.svg'
 import Link from 'next/link'
-import { createAccount } from '@/lib/actions/user.actions'
+import { createAccount, signInUser } from '@/lib/actions/user.actions'
 import OtpModal from './OtpModal'
 
 // Define FormType
@@ -55,10 +55,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
 		setIsLoading(true)
 		setErrorMessage('')
 		try {
-			const user = await createAccount({
-				username: values.username || '',
-				email: values.email,
-			})
+			const user =
+				type === 'sign-up'
+					? await createAccount({
+							username: values.username || '',
+							email: values.email,
+						})
+					: await signInUser({ email: values.email })
 			setAccountId(user.accountId)
 		} catch (err) {
 			setErrorMessage('Failed to create an account. Please try again')
