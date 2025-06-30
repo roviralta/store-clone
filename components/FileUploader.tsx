@@ -5,103 +5,53 @@ import { Button } from './ui/button'
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { convertFileToUrl, getFileType } from '@/lib/utils'
-import Thumbnail from './Thumbnail'
-import loader from '../public/loader.svg'
-import Image from 'next/image'
-import { motion } from 'framer-motion'
+import UploadSummary from './UploadSummary'
 
 interface Props {
 	ownerId: string
 	accountId: string
-	classname: string
 }
 
-const FileUploader = ({ ownerId, accountId, classname }: Props) => {
+const FileUploader = ({ ownerId, accountId }: Props) => {
 	const [files, setFiles] = useState<File[]>([])
+	const [showSummary, setShowSummary] = useState(false)
 
-	const onDrop = useCallback(async (acceptedFiles: File[]) => {
+	const onDrop = useCallback((acceptedFiles: File[]) => {
+		console.log('Dropped files:', acceptedFiles)
 		setFiles(acceptedFiles)
+		setShowSummary(true)
 	}, [])
 
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
-		onDrop,
-	})
+	const totalSize = files.reduce((acc, file) => acc + file.size, 0)
 
-	const rootProps = getRootProps()
-
-	const handleRemoveFile = (
-		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-		fileName: string
-	) => {
-		e.stopPropagation()
-		setFiles((prev) => prev.filter((file) => file.name !== fileName))
-	}
+	const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
 	return (
-		<motion.div
-			className={`w-full transition-colors duration-200 cursor-pointer ${classname}`}
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.4 }}
-			{...(rootProps as any)}
-		>
-			<input {...getInputProps()} />
-
-			<Button
-				type='button'
-				className='bg-gray-200 text-gray-800 hover:cursor-pointer hover:bg-blue-100 w-full sm:w-auto'
-			>
-				<MdCloudUpload className='mr-2' />
-				<p className='hidden md:block'>Upload</p>
-			</Button>
-
-			{files.length > 0 && (
-				<motion.div
-					className='mt-6 space-y-4'
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{ delay: 0.2 }}
+		<div className='relative flex flex-col justify-center items-center'>
+			{/* Dropzone area */}
+			<div {...getRootProps()}>
+				<input {...getInputProps()} />
+				<Button
+					type='button'
+					className='bg-gray-200 text-gray-800 hover:cursor-pointer hover:bg-blue-100 w-full sm:w-auto'
 				>
-					<h4 className='font-semibold text-gray-700'>Uploading</h4>
-					<ul className='space-y-3'>
-						{files.map((file, index) => {
-							const { type, extension } = getFileType(file.name)
-							return (
-								<li
-									key={`${file.name}-${index}`}
-									className='flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white shadow p-3 rounded-lg'
-								>
-									<Thumbnail
-										type={type}
-										extension={extension}
-										url={convertFileToUrl(file)}
-									/>
-									<div className='flex-1'>
-										<p className='text-sm font-medium text-gray-800 break-all'>
-											{file.name}
-										</p>
-										<Image
-											src={loader}
-											alt='Uploading...'
-											width={80}
-											height={26}
-										/>
-									</div>
-									<button
-										onClick={(e) =>
-											handleRemoveFile(e, file.name)
-										}
-										className='text-red-500 hover:text-red-700 transition-colors text-sm font-medium'
-									>
-										Remove
-									</button>
-								</li>
-							)
-						})}
-					</ul>
-				</motion.div>
+					<MdCloudUpload />
+					<p className='hidden md:block'>Upload</p>
+				</Button>
+			</div>
+
+			{/* Upload summary outside the dropzone */}
+			{showSummary && (
+				<div className='absolute top-10 right-25'>
+					<UploadSummary
+						totalFiles={files.length}
+						totalSize={totalSize}
+						progress={42}
+						onClose={() => setShowSummary(false)}
+					/>
+				</div>
 			)}
-		</motion.div>
+		</div>
 	)
 }
 

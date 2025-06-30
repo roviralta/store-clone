@@ -12,11 +12,7 @@ const Header = ({ user }: any) => {
 			</span>
 			<div className='flex items-center gap-4'>
 				<span className='text-sm text-gray-700'>
-					<FileUploader
-						ownerId={user.ownerId}
-						accountId={user.accountId}
-						classname=''
-					/>
+					<FileUploader ownerId='' accountId='' />
 				</span>
 				{user && (
 					<form
