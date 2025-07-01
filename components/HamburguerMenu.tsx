@@ -1,3 +1,4 @@
+'use client'
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -27,12 +28,12 @@ const HamburguerMenu = ({ user }: any) => {
 				'
 				>
 					<h1 className='font-bold text-[20px]'>Cluud</h1>
-					<Image src={logobg} alt='logo' width={50} height={50} />
+					<Image src={logobg} alt='logo' width={50} />
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{navItems.map((item) => {
 					return (
-						<Link href={item.url} key={item.url}>
+						<Link href={item.url} key={item.url} as='image'>
 							<DropdownMenuItem className='hover:bg-gray-100 h-12 px-3 py-2 rounded-md cursor-pointer transition'>
 								<item.icon className='size-4' />
 								<span className='text-gray-700'>

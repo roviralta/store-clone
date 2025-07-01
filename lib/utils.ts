@@ -62,6 +62,8 @@ export const getFileType = (filename: string) => {
 	}
 }
 
-export const convertFileToUrl = (file: File) => {
-	return URL.createObjectURL(file)
+export const constructFileUrl = (bucketFileId: string) => {
+	return `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_BUCKET}/files/${bucketFileId}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`
 }
+
+export const MAX_FILE_SIZE = 50 * 1024 * 1024 //50MB

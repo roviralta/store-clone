@@ -3,6 +3,7 @@ import MobileNavigator from '@/components/MobileNavigator'
 import Sidebar from '@/components/Sidebar'
 import React from 'react'
 import { getCurrentUser } from '@/lib/actions/user.actions'
+import { Toaster } from '@/components/ui/sonner'
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
 	let user = null
@@ -17,6 +18,8 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 				username: user.username,
 				avatar: user.avatar,
 				email: user.email,
+				id: user.$id,
+				accountId: user.accountId,
 			}
 		: null
 
@@ -28,6 +31,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 				<Header user={plainUser} />
 				<div>{children}</div>
 			</section>
+			<Toaster />
 		</main>
 	)
 }

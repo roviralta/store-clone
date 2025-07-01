@@ -15,6 +15,11 @@ const formatSize = (bytes: number) => {
 }
 
 const UploadSummary = ({ totalFiles, totalSize, progress, onClose }: Props) => {
+	const handleClose = (e: React.MouseEvent) => {
+		e.stopPropagation() // Prevent the click from bubbling up
+		onClose()
+	}
+
 	return (
 		<div className='absolute top-full left-0 mt-2 bg-white border border-gray-300 rounded-md shadow-lg w-auto p-4'>
 			<div className='flex justify-between items-start'>
@@ -28,8 +33,8 @@ const UploadSummary = ({ totalFiles, totalSize, progress, onClose }: Props) => {
 					</p>
 				</div>
 				<button
-					onClick={onClose}
-					className='text-gray-400 hover:text-gray-600 text-sm font-bold ml-2'
+					onClick={handleClose}
+					className='text-gray-400 hover:text-gray-600 text-sm font-bold ml-2 hover:cursoir-pointer'
 				>
 					×
 				</button>
