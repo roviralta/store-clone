@@ -4,6 +4,7 @@ import Sidebar from '@/components/Sidebar'
 import React from 'react'
 import { getCurrentUser } from '@/lib/actions/user.actions'
 import { Toaster } from '@/components/ui/sonner'
+import { redirect } from 'next/dist/server/api-utils'
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
 	let user = null
@@ -12,6 +13,8 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 	} catch (error) {
 		console.log('User not logged in, continuing without user...')
 	}
+
+	//if (!user) return redirect('/sign-in')
 
 	const plainUser = user
 		? {

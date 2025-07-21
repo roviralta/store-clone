@@ -20,8 +20,6 @@ const FileUploader = ({ ownerId, accountId }: Props) => {
 	const [files, setFiles] = useState<File[]>([])
 	const [showSummary, setShowSummary] = useState(false)
 
-	console.log('details: ', ownerId, accountId)
-
 	const onDrop = useCallback(
 		async (acceptedFiles: File[]) => {
 			// Filter out files that are too large before processing
@@ -136,7 +134,7 @@ const FileUploader = ({ ownerId, accountId }: Props) => {
 				>
 					<MdCloudUpload />
 					<p className='hidden md:block ml-2'>Upload</p>
-				</div>
+				</div> 
 			)}
 
 			{/* Upload summary outside the dropzone */}
@@ -145,7 +143,6 @@ const FileUploader = ({ ownerId, accountId }: Props) => {
 					<UploadSummary
 						totalFiles={files.length}
 						totalSize={totalSize}
-						progress={42}
 						onClose={handleRemove}
 					/>
 				</div>

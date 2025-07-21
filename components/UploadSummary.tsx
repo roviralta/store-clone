@@ -1,9 +1,10 @@
 import React from 'react'
+import Image from 'next/image'
+import fileloader from '../public/file-loader.gif'
 
 interface Props {
 	totalFiles: number
 	totalSize: number
-	progress?: number
 	onClose: () => void
 }
 
@@ -14,7 +15,8 @@ const formatSize = (bytes: number) => {
 	return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`
 }
 
-const UploadSummary = ({ totalFiles, totalSize, progress, onClose }: Props) => {
+const UploadSummary = ({ totalFiles, totalSize, onClose }: Props) => {
+	
 	const handleClose = (e: React.MouseEvent) => {
 		e.stopPropagation() // Prevent the click from bubbling up
 		onClose()
@@ -34,20 +36,17 @@ const UploadSummary = ({ totalFiles, totalSize, progress, onClose }: Props) => {
 				</div>
 				<button
 					onClick={handleClose}
-					className='text-gray-400 hover:text-gray-600 text-sm font-bold ml-2 hover:cursoir-pointer'
+					className='text-gray-400 hover:text-gray-600 text-sm font-bold ml-2 hover:cursor-pointer'
+					aria-label='Close upload summary'
+					title='Close'
 				>
 					×
 				</button>
 			</div>
 
-			{progress !== undefined && (
-				<div className='w-full bg-gray-100 rounded-full h-2 mt-2'>
-					<div
-						className='bg-blue-500 h-2 rounded-full transition-all duration-300'
-						style={{ width: `${progress}%` }}
-					/>
-				</div>
-			)}
+			<div className='w-full bg-gray-100 rounded-full h-2 mt-2'>
+				<Image src={fileloader} alt='file loader' />
+			</div>
 		</div>
 	)
 }
