@@ -6,7 +6,7 @@ import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import UploadSummary from './UploadSummary'
 import { MAX_FILE_SIZE } from '../lib/utils'
-import { toast } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import { uploadFile } from '@/lib/actions/file.actions'
 import { usePathname } from 'next/navigation'
 
@@ -19,6 +19,8 @@ const FileUploader = ({ ownerId, accountId }: Props) => {
 	const path = usePathname()
 	const [files, setFiles] = useState<File[]>([])
 	const [showSummary, setShowSummary] = useState(false)
+
+	console.log('details: ', ownerId, accountId)
 
 	const onDrop = useCallback(
 		async (acceptedFiles: File[]) => {
@@ -115,16 +117,27 @@ const FileUploader = ({ ownerId, accountId }: Props) => {
 	return (
 		<div className='relative flex flex-col justify-center items-center'>
 			{/* Dropzone area */}
-			<div {...getRootProps()}>
-				<input {...getInputProps()} />
-				<Button
-					type='button'
-					className='bg-gray-200 text-gray-800 hover:cursor-pointer hover:bg-blue-100 w-full sm:w-auto'
+			{ownerId && accountId ? (
+				<div {...getRootProps()}>
+					<input {...getInputProps()} />
+					<Button
+						type='button'
+						className='bg-gray-200 text-gray-800 hover:cursor-pointer hover:bg-blue-100 w-full sm:w-auto'
+					>
+						<MdCloudUpload />
+						<p className='hidden md:block'>Upload</p>
+					</Button>
+				</div>
+			) : (
+				<div
+					className='w-full sm:w-auto bg-gray-200 text-gray-400 flex items-center justify-center rounded-md h-9 px-4 py-2 cursor-not-allowed select-none'
+					onClick={() => toast(<p>Please log in to upload files.</p>)}
+					style={{ pointerEvents: 'auto' }}
 				>
 					<MdCloudUpload />
-					<p className='hidden md:block'>Upload</p>
-				</Button>
-			</div>
+					<p className='hidden md:block ml-2'>Upload</p>
+				</div>
+			)}
 
 			{/* Upload summary outside the dropzone */}
 			{showSummary && (

@@ -15,10 +15,7 @@ const MobileNavigator = ({ user }: any) => {
 
 			<div className='center gap-3'>
 				<span className='text-sm text-gray-700'>
-					<FileUploader
-						ownerId={user.id}
-						accountId={user.accountId}
-					/>
+					<FileUploader ownerId={user} accountId={user} />
 				</span>
 				<form
 					className='items-center'
