@@ -111,8 +111,17 @@ export const signOutUser = async () => {
 	try {
 		await account.deleteSession('current')
 		;(await cookies()).delete('appwrite-session')
+
+		console.log('[Auth] User signed out successfully', {
+			timestamp: new Date().toISOString(),
+		})
 	} catch (error) {
-		handleError(error, 'Error logging out')
+		console.error('[Auth] Sign out error:', {
+			error: error instanceof Error ? error.message : 'Unknown error',
+			timestamp: new Date().toISOString(),
+		})
+
+		throw new Error('Failed to sign out')
 	} finally {
 		redirect('/sign-in')
 	}

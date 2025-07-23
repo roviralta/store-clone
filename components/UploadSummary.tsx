@@ -16,7 +16,6 @@ const formatSize = (bytes: number) => {
 }
 
 const UploadSummary = ({ totalFiles, totalSize, onClose }: Props) => {
-	
 	const handleClose = (e: React.MouseEvent) => {
 		e.stopPropagation() // Prevent the click from bubbling up
 		onClose()

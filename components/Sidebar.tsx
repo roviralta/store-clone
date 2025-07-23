@@ -1,58 +1,138 @@
 'use client'
-import React from 'react'
-import logobg from '../public/logobg.png'
+
+import React, { memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { navItems } from '@/app/constants'
 import { usePathname } from 'next/navigation'
-import Profile from './Profile'
 import { CgProfile } from 'react-icons/cg'
 
-const Sidebar = ({ user }: any) => {
-	const pathname = usePathname()
-	return (
-		<aside className='hidden sm:flex flex-col gap-20 p-4 w-48 lg:w-80 lg:text-[18px] border-r h-full'>
-			<Link
-				href='/'
-				className='center gap-2 text-3xl font-bold text-gray-600'
-			>
-				<h1>Cluud</h1>
-				<Image src={logobg} alt='logo' height={50} />
-			</Link>
-			<ul className='flex flex-col gap-5 space-y-2 text-gray-700 font-medium'>
-				{navItems.map((item) => {
-					const active = pathname === item.url
-					return (
-						<Link key={item.url} href={item.url}>
-							<li
-								className={`hover:rounded-2xl h-10 hover:border hover:bg-blue-100 cursor-pointer flex justify-center items-center gap-4 ${
-									active
-										? 'bg-blue-100 border rounded-2xl'
-										: ''
-								}`}
-							>
-								<item.icon className='size-5' />
-								{item.name}
-							</li>
-						</Link>
-					)
-				})}
-			</ul>
-			<div className='flex justify-center h-screen items-end mb-20'>
-				{user?.username ? (
-					<Profile {...user} />
-				) : (
-					<Link
-						href='sign-in'
-						className='hover:font-semibold text-gray-800 hover:underline underline-offset-4 decoration-2 decoration-blue-500 center gap-2'
-					>
-						<CgProfile size={25} />
-						<span>Login</span>
-					</Link>
+import { navItems } from '@/app/constants'
+import Profile from './Profile'
+import { cn } from '@/lib/utils'
+import { NormalizedUser } from '../lib/types/user'
+
+interface SidebarProps {
+	user: NormalizedUser
+}
+
+interface NavItemProps {
+	item: {
+		name: string
+		url: string
+		icon: React.ComponentType<{ className?: string }>
+	}
+	isActive: boolean
+}
+
+const NavigationItem = memo(({ item, isActive }: NavItemProps) => (
+	<li>
+		<Link
+			href={item.url}
+			className={cn(
+				'group flex items-center gap-4 h-12 px-4 rounded-xl transition-all duration-200',
+				'text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600',
+				'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+				isActive &&
+					'bg-blue-100 text-blue-600 shadow-sm border border-blue-200'
+			)}
+			aria-current={isActive ? 'page' : undefined}
+		>
+			<item.icon
+				className={cn(
+					'w-5 h-5 transition-colors',
+					isActive
+						? 'text-blue-600'
+						: 'text-gray-500 group-hover:text-blue-600'
 				)}
+			/>
+			<span className='text-sm lg:text-base'>{item.name}</span>
+		</Link>
+	</li>
+))
+
+NavigationItem.displayName = 'NavigationItem'
+
+const Logo = memo(() => (
+	<Link
+		href='/'
+		className='flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group'
+		aria-label='Cluud - Home'
+	>
+		<h1 className='text-2xl lg:text-3xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors'>
+			Cluud
+		</h1>
+		<div className='relative'>
+			<Image
+				src='/logobg.png'
+				alt='Cluud logo'
+				width={40}
+				height={40}
+				className='lg:w-15 lg:h-10 transition-transform group-hover:scale-110'
+				priority
+			/>
+		</div>
+	</Link>
+))
+
+Logo.displayName = 'Logo'
+
+const AuthSection = memo(({ user }: { user: NormalizedUser | null }) => (
+	<div className='mt-auto pb-6'>
+		{user?.username ? (
+			<Profile {...user} />
+		) : (
+			<Link
+				href='/sign-in'
+				className={cn(
+					'flex items-center gap-3 p-3 rounded-xl text-gray-700',
+					'hover:bg-blue-50 hover:text-blue-600 transition-all duration-200',
+					'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+				)}
+			>
+				<CgProfile className='w-6 h-6' />
+				<span className='font-medium'>Iniciar Sesión</span>
+			</Link>
+		)}
+	</div>
+))
+
+AuthSection.displayName = 'AuthSection'
+
+const Sidebar = memo(({ user }: SidebarProps) => {
+	const pathname = usePathname()
+
+	return (
+		<aside
+			className={cn(
+				'hidden sm:flex flex-col',
+				'w-64 lg:w-80 h-full',
+				'bg-white border-r border-gray-200',
+				'p-4 lg:p-6'
+			)}
+			role='navigation'
+			aria-label='Principal navigation'
+		>
+			<div className='mb-8'>
+				<Logo />
 			</div>
+
+			<nav className='flex-1' role='navigation'>
+				<ul className='space-y-2' role='list'>
+					{navItems.map((item) => (
+						<NavigationItem
+							key={item.url}
+							item={item}
+							isActive={pathname === item.url}
+						/>
+					))}
+				</ul>
+			</nav>
+
+			<AuthSection user={user} />
 		</aside>
 	)
-}
+})
+
+Sidebar.displayName = 'Sidebar'
 
 export default Sidebar

@@ -2,11 +2,11 @@
 
 import { MdCloudUpload } from 'react-icons/md'
 import { Button } from './ui/button'
-import React, { useCallback, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import UploadSummary from './UploadSummary'
 import { MAX_FILE_SIZE } from '../lib/utils'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 import { uploadFile } from '@/lib/actions/file.actions'
 import { usePathname } from 'next/navigation'
 
@@ -15,7 +15,7 @@ interface Props {
 	accountId: string
 }
 
-const FileUploader = ({ ownerId, accountId }: Props) => {
+const FileUploader = memo(({ ownerId, accountId }: Props) => {
 	const path = usePathname()
 	const [files, setFiles] = useState<File[]>([])
 	const [showSummary, setShowSummary] = useState(false)
@@ -134,7 +134,7 @@ const FileUploader = ({ ownerId, accountId }: Props) => {
 				>
 					<MdCloudUpload />
 					<p className='hidden md:block ml-2'>Upload</p>
-				</div> 
+				</div>
 			)}
 
 			{/* Upload summary outside the dropzone */}
@@ -149,6 +149,6 @@ const FileUploader = ({ ownerId, accountId }: Props) => {
 			)}
 		</div>
 	)
-}
+})
 
 export default FileUploader
