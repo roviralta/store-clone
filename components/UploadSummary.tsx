@@ -1,18 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
 import fileloader from '../public/file-loader.gif'
+import { formatSize } from '../lib/utils'
 
 interface Props {
 	totalFiles: number
 	totalSize: number
 	onClose: () => void
-}
-
-const formatSize = (bytes: number): string => {
-	const sizes = ['Bytes', 'KB', 'MB', 'GB']
-	if (bytes === 0) return '0 Byte'
-	const i = Math.floor(Math.log(bytes) / Math.log(1024))
-	return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`
 }
 
 const UploadSummary = ({ totalFiles, totalSize, onClose }: Props) => {
