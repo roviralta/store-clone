@@ -39,7 +39,7 @@ const authFormSchema = (formtype: FormType) =>
 const AuthForm = ({ type }: { type: FormType }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-	const [accountId, setAccountId] = useState(null)
+	const [accountId, setAccountId] = useState<string | null>(null)
 
 	const formSchema = authFormSchema(type)
 
@@ -75,9 +75,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className='space-y-8 w-1/2'
+					className='space-y-8 max-w-sm mx-auto'
 				>
-					<h1 className='font-bold m-5 text-2xl mb-8'>
+					<h1 className='font-bold m-5 text-2xl mb-8 text-center'>
 						{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
 					</h1>
 
@@ -92,7 +92,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 										<Input
 											placeholder='Enter your username'
 											{...field}
-											className='shadow h-10 sm:text-[15px] text-[10px]'
+											className='shadow h-10 sm:text-[15px] text-[12px] w-80'
 										/>
 									</FormControl>
 									<FormMessage />
@@ -111,7 +111,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 									<Input
 										placeholder='Enter your email'
 										{...field}
-										className='shadow h-10 sm:text-[15px] text-[10px]'
+										className='shadow h-10 sm:text-[15px] text-[12px] w-80'
 									/>
 								</FormControl>
 								<FormMessage />
@@ -121,7 +121,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
 					<Button
 						type='submit'
-						className='bg-blue-100 text-black hover:bg-blue-300 hover:cursor-pointer'
+						className='bg-blue-100 text-black hover:bg-blue-300 hover:cursor-pointer w-full'
 						disabled={isLoading}
 					>
 						{type === 'sign-in' ? 'Sign In' : 'Sign Up'}
@@ -132,12 +132,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
 								className='animate-spin ml-2'
 								width={20}
 								height={20}
+								priority
 							/>
 						)}
 					</Button>
 
 					{errorMessage && (
-						<p className='text-red-500'>{errorMessage}</p>
+						<p className='text-red-500 text-sm text-center'>
+							{errorMessage}
+						</p>
 					)}
 
 					<div className='flex justify-center sm:text-[15px] text-[10px]'>
@@ -155,6 +158,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 					</div>
 				</form>
 			</Form>
+
 			{accountId && (
 				<OtpModal
 					key={accountId + '-' + Date.now()}

@@ -30,7 +30,7 @@ const NavigationItem = memo(({ item, isActive }: NavItemProps) => (
 			href={item.url}
 			className={cn(
 				'group flex items-center gap-4 h-12 px-4 rounded-xl transition-all duration-200',
-				'text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600',
+				'text-muted-foreground hover:bg-blue-50 hover:text-blue-600',
 				'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
 				isActive &&
 					'bg-blue-100 text-blue-600 shadow-sm border border-blue-200'
@@ -42,7 +42,7 @@ const NavigationItem = memo(({ item, isActive }: NavItemProps) => (
 					'w-5 h-5 transition-colors',
 					isActive
 						? 'text-blue-600'
-						: 'text-gray-500 group-hover:text-blue-600'
+						: 'text-muted-foreground group-hover:text-blue-600'
 				)}
 			/>
 			<span className='text-sm lg:text-base'>{item.name}</span>
@@ -84,13 +84,13 @@ const AuthSection = memo(({ user }: { user: NormalizedUser | null }) => (
 			<Link
 				href='/sign-in'
 				className={cn(
-					'flex items-center gap-3 p-3 rounded-xl text-gray-700',
-					'hover:bg-blue-50 hover:text-blue-600 transition-all duration-200',
+					'flex items-center gap-3 p-3 rounded-xl',
+					'text-muted-foreground hover:bg-blue-50 hover:text-blue-600 transition-all duration-200',
 					'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
 				)}
 			>
 				<CgProfile className='w-6 h-6' />
-				<span className='font-medium'>Iniciar Sesión</span>
+				<span className='font-medium'>Log In</span>
 			</Link>
 		)}
 	</div>
@@ -106,7 +106,7 @@ const Sidebar = memo(({ user }: SidebarProps) => {
 			className={cn(
 				'hidden sm:flex flex-col',
 				'w-64 lg:w-80 h-full',
-				'bg-white border-r border-gray-200',
+				'bg-white border-r border-border',
 				'p-4 lg:p-6'
 			)}
 			role='navigation'

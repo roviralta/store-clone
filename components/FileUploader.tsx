@@ -9,6 +9,7 @@ import { MAX_FILE_SIZE } from '../lib/utils'
 import { toast } from 'sonner'
 import { uploadFile } from '@/lib/actions/file.actions'
 import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 interface Props {
 	ownerId: string
@@ -22,7 +23,6 @@ const FileUploader = memo(({ ownerId, accountId }: Props) => {
 
 	const onDrop = useCallback(
 		async (acceptedFiles: File[]) => {
-			// Filter out files that are too large before processing
 			const validFiles = acceptedFiles.filter((file) => {
 				if (file.size > MAX_FILE_SIZE) {
 					toast(
@@ -36,61 +36,53 @@ const FileUploader = memo(({ ownerId, accountId }: Props) => {
 				return true
 			})
 
-			if (validFiles.length === 0) {
-				return // No valid files to upload
-			}
+			if (!validFiles.length) return
 
-			// Set the valid files and show summary
 			setFiles(validFiles)
 			setShowSummary(true)
 
-			// Upload each valid file
-			const uploadPromises = validFiles.map(async (file) => {
-				try {
-					const uploadedFile = await uploadFile({
-						file,
-						ownerId,
-						accountId,
-						path,
-					})
+			const uploadResults = await Promise.all(
+				validFiles.map(async (file) => {
+					try {
+						const uploadedFile = await uploadFile({
+							file,
+							ownerId,
+							accountId,
+							path,
+						})
 
-					if (uploadedFile) {
-						// Remove successfully uploaded file from the list
-						setFiles((prev) =>
-							prev.filter((f) => f.name !== file.name)
-						)
-						return { success: true, fileName: file.name }
-					} else {
+						if (uploadedFile) {
+							setFiles((prev) =>
+								prev.filter((f) => f.name !== file.name)
+							)
+							return { success: true, fileName: file.name }
+						} else {
+							toast(
+								<p>
+									There was a problem uploading{' '}
+									<span className='font-medium'>
+										{file.name}
+									</span>
+								</p>
+							)
+							return { success: false, fileName: file.name }
+						}
+					} catch (error) {
+						console.error(`Error uploading ${file.name}:`, error)
 						toast(
 							<p>
-								There is a problem uploading{' '}
+								Failed to upload{' '}
 								<span className='font-medium'>{file.name}</span>
 							</p>
 						)
 						return { success: false, fileName: file.name }
 					}
-				} catch (error) {
-					console.error(`Error uploading ${file.name}:`, error)
-					toast(
-						<p>
-							Failed to upload{' '}
-							<span className='font-medium'>{file.name}</span>
-						</p>
-					)
-					return { success: false, fileName: file.name }
-				}
-			})
+				})
+			)
 
-			// Wait for all uploads to complete
-			const results = await Promise.all(uploadPromises)
-
-			// Hide summary after all uploads are done
 			setShowSummary(false)
 
-			// Show success message if any files were uploaded successfully
-			const successCount = results.filter(
-				(result) => result.success
-			).length
+			const successCount = uploadResults.filter((r) => r.success).length
 			if (successCount > 0) {
 				toast(
 					<p>
@@ -114,32 +106,48 @@ const FileUploader = memo(({ ownerId, accountId }: Props) => {
 
 	return (
 		<div className='relative flex flex-col justify-center items-center'>
-			{/* Dropzone area */}
 			{ownerId && accountId ? (
-				<div {...getRootProps()}>
-					<input {...getInputProps()} />
+				<div {...getRootProps()} className='w-full sm:w-auto'>
+					<input
+						{...getInputProps()}
+						aria-label='Upload file input'
+					/>
 					<Button
 						type='button'
-						className='bg-gray-200 text-gray-800 hover:cursor-pointer hover:bg-blue-100 w-full sm:w-auto'
+						className={cn(
+							'w-full sm:w-auto flex items-center gap-2 bg-gray-200 text-gray-800',
+							'hover:bg-blue-100 hover:text-blue-600 transition-colors',
+							'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+						)}
 					>
-						<MdCloudUpload />
-						<p className='hidden md:block'>Upload</p>
+						<MdCloudUpload className='text-xl' />
+						<span className='hidden md:inline'>Upload</span>
 					</Button>
 				</div>
 			) : (
 				<div
-					className='w-full sm:w-auto bg-gray-200 text-gray-400 flex items-center justify-center rounded-md h-9 px-4 py-2 cursor-not-allowed select-none'
+					role='button'
+					tabIndex={0}
 					onClick={() => toast(<p>Please log in to upload files.</p>)}
-					style={{ pointerEvents: 'auto' }}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							toast(<p>Please log in to upload files.</p>)
+						}
+					}}
+					className={cn(
+						'w-full sm:w-auto h-9 px-4 py-2 rounded-md flex items-center justify-center',
+						'bg-gray-200 text-gray-400 cursor-not-allowed select-none',
+						'transition'
+					)}
+					aria-disabled='true'
 				>
-					<MdCloudUpload />
-					<p className='hidden md:block ml-2'>Upload</p>
+					<MdCloudUpload className='text-xl' />
+					<span className='hidden md:inline ml-2'>Upload</span>
 				</div>
 			)}
 
-			{/* Upload summary outside the dropzone */}
 			{showSummary && (
-				<div className='absolute top-10 right-25'>
+				<div className='absolute top-10 right-0 sm:right-10 z-10'>
 					<UploadSummary
 						totalFiles={files.length}
 						totalSize={totalSize}
@@ -151,4 +159,5 @@ const FileUploader = memo(({ ownerId, accountId }: Props) => {
 	)
 })
 
+FileUploader.displayName = 'FileUploader'
 export default FileUploader

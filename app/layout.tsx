@@ -1,11 +1,15 @@
+// app/layout.tsx
+
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import './globals.css'
 
+// Only load the font weights you actually use
 const poppins = Poppins({
 	subsets: ['latin'],
-	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+	weight: ['400', '600', '700'],
 	variable: '--font-poppins',
+	display: 'swap', // Ensures text remains visible during webfont load
 })
 
 export const metadata: Metadata = {
@@ -13,6 +17,7 @@ export const metadata: Metadata = {
 	description: 'Cluud - The only storage solution you need.',
 }
 
+export const viewport = 'width=device-width, initial-scale=1' // ✅ proper way
 export default function RootLayout({
 	children,
 }: Readonly<{

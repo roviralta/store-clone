@@ -1,3 +1,5 @@
+// app/(dashboard)/layout.tsx
+
 import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 
@@ -6,7 +8,7 @@ import MobileNavigator from '@/components/MobileNavigator'
 import Sidebar from '@/components/Sidebar'
 import { Toaster } from '@/components/ui/sonner'
 import { getCurrentUser } from '@/lib/actions/user.actions'
-import { AuthError } from '../../lib/errors'
+import { AuthError } from '@/lib/errors'
 
 interface User {
 	$id: string
@@ -23,10 +25,10 @@ interface DashboardLayoutProps {
 function LayoutSkeleton() {
 	return (
 		<main className='flex h-screen animate-pulse'>
-			<div className='w-64 bg-gray-200' />
-			<section className='flex h-full flex-1 flex-col'>
-				<div className='h-16 bg-gray-100' />
-				<div className='flex-1 bg-gray-50' />
+			<div className='w-64 bg-muted' />
+			<section className='flex flex-1 flex-col'>
+				<div className='h-16 bg-muted/70' />
+				<div className='flex-1 bg-muted/40' />
 			</section>
 		</main>
 	)
@@ -36,11 +38,7 @@ async function getAuthenticatedUser(): Promise<User> {
 	try {
 		const user = await getCurrentUser()
 
-		if (!user) {
-			throw new AuthError('No user session found')
-		}
-
-		if (!user.username || !user.email || !user.accountId) {
+		if (!user?.username || !user.email || !user.accountId) {
 			throw new AuthError('Incomplete user data')
 		}
 
@@ -70,7 +68,7 @@ async function DashboardLayout({ children }: DashboardLayoutProps) {
 		<main className='flex h-screen bg-background'>
 			<Sidebar user={normalizedUser} />
 
-			<section className='flex h-full flex-1 flex-col overflow-hidden'>
+			<section className='flex flex-1 flex-col overflow-hidden'>
 				<div className='block lg:hidden'>
 					<MobileNavigator user={normalizedUser} />
 				</div>
@@ -80,8 +78,8 @@ async function DashboardLayout({ children }: DashboardLayoutProps) {
 				<div className='flex-1 overflow-auto p-6'>
 					<Suspense
 						fallback={
-							<div className='animate-pulse'>
-								Loading content...
+							<div className='text-sm text-muted-foreground'>
+								Loading content…
 							</div>
 						}
 					>
@@ -108,7 +106,7 @@ async function DashboardLayout({ children }: DashboardLayoutProps) {
 export default function Layout({ children }: DashboardLayoutProps) {
 	return (
 		<Suspense fallback={<LayoutSkeleton />}>
-			<DashboardLayout>{children} </DashboardLayout>
+			<DashboardLayout>{children}</DashboardLayout>
 		</Suspense>
 	)
 }
