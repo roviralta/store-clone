@@ -54,7 +54,7 @@ NavigationItem.displayName = 'NavigationItem'
 
 const Logo = memo(() => (
 	<Link
-		href='/'
+		href='/dashboard'
 		className='flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group'
 		aria-label='Cluud - Home'
 	>

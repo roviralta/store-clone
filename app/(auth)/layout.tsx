@@ -13,6 +13,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 						width={120}
 						height={60}
 						className='w-20 '
+						priority
 					/>
 					<h2 className='text-lg sm:text-xl font-semibold'>Cluud</h2>
 				</div>

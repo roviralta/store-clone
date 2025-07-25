@@ -27,8 +27,9 @@ const FileUploader = memo(({ ownerId, accountId }: Props) => {
 				if (file.size > MAX_FILE_SIZE) {
 					toast(
 						<p>
-							<span className='font-medium'>{file.name}</span> is
-							too large!
+							<span className='font-medium text-red-500'>
+								{file.name} is too large!
+							</span>
 						</p>
 					)
 					return false
@@ -117,7 +118,7 @@ const FileUploader = memo(({ ownerId, accountId }: Props) => {
 						className={cn(
 							'w-full sm:w-auto flex items-center gap-2 bg-gray-200 text-gray-800',
 							'hover:bg-blue-100 hover:text-blue-600 transition-colors',
-							'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+							'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 hover:cursor-pointer'
 						)}
 					>
 						<MdCloudUpload className='text-xl' />

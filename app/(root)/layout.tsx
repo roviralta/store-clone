@@ -65,7 +65,7 @@ async function DashboardLayout({ children }: DashboardLayoutProps) {
 	}
 
 	return (
-		<main className='flex h-screen bg-background'>
+		<main className='flex h-screen bg-gray-100'>
 			<Sidebar user={normalizedUser} />
 
 			<section className='flex flex-1 flex-col overflow-hidden'>
@@ -93,7 +93,7 @@ async function DashboardLayout({ children }: DashboardLayoutProps) {
 				toastOptions={{
 					duration: 4000,
 					style: {
-						background: 'hsl(var(--background))',
+						background: 'white',
 						color: 'hsl(var(--foreground))',
 						border: '1px solid hsl(var(--border))',
 					},

@@ -32,7 +32,7 @@ const page = async ({ params }: SearchParamProps) => {
 				</div>
 			</section>
 			{files.total > 0 ? (
-				<section className='flex flex-wrap items-center justify-center gap-4 pt-5'>
+				<section className='flex flex-wrap items-center justify-center gap-10 pt-5'>
 					{files.documents.map((file: any) => (
 						<FileCard key={file.$id} file={file} />
 					))}

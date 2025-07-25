@@ -1,6 +1,6 @@
 'use client'
 
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -12,7 +12,6 @@ import {
 import { IoMenu } from 'react-icons/io5'
 import Image from 'next/image'
 import Link from 'next/link'
-
 import logobg from '../public/logobg.png'
 import { navItems } from '@/app/constants'
 import Profile from './Profile'
@@ -24,13 +23,17 @@ interface HamburguerMenuProps {
 }
 
 const HamburguerMenu = memo(({ user }: HamburguerMenuProps) => {
+	const [isOpen, setIsOpen] = useState(false)
+
+	const handleClose = () => setIsOpen(false)
+
 	return (
-		<DropdownMenu>
+		<DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
 			<DropdownMenuTrigger asChild>
 				<button
 					type='button'
 					aria-label='Open navigation menu'
-					className='p-1 rounded-md hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition'
+					className='p-1 rounded-md hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition hover:cursor-pointer'
 				>
 					<IoMenu className='size-7 text-gray-800' />
 				</button>
@@ -58,13 +61,9 @@ const HamburguerMenu = memo(({ user }: HamburguerMenuProps) => {
 				<DropdownMenuSeparator />
 
 				{navItems.map((item) => (
-					<Link
-						key={item.url}
-						href={item.url}
-						legacyBehavior
-						passHref
-					>
+					<Link key={item.url} href={item.url} passHref>
 						<DropdownMenuItem
+							onClick={handleClose}
 							className={cn(
 								'flex items-center gap-2 h-10 px-3 py-2 rounded-md cursor-pointer text-gray-700',
 								'hover:bg-gray-100 hover:text-blue-600 transition-colors',
@@ -81,6 +80,7 @@ const HamburguerMenu = memo(({ user }: HamburguerMenuProps) => {
 
 				{user?.username ? (
 					<DropdownMenuItem
+						onClick={handleClose}
 						className={cn(
 							'h-12 px-3 py-2 rounded-md cursor-pointer text-gray-700',
 							'hover:bg-gray-100 hover:text-blue-600 transition-colors',
@@ -92,6 +92,7 @@ const HamburguerMenu = memo(({ user }: HamburguerMenuProps) => {
 				) : (
 					<Link href='/sign-in' passHref>
 						<DropdownMenuItem
+							onClick={handleClose}
 							className={cn(
 								'h-10 px-3 py-2 rounded-md cursor-pointer text-gray-800',
 								'hover:bg-gray-100 hover:text-blue-600 transition-colors',
